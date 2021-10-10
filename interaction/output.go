@@ -4,6 +4,9 @@ package interaction
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+
+	"github.com/common-nighthawk/go-figure"
 )
 
 type RoundData struct {
@@ -17,7 +20,8 @@ type RoundData struct {
 
 func PrintGreeting () {
 	//Capticla function, will be import in other package
-	fmt.Println("MONSTER SLAYER")
+	myFigure := figure.NewFigure("MONSTER SLAYER", "", true)
+  	myFigure.Print()
 	fmt.Println("Loadign to the game")
 	fmt.Println("Good luck....")
 	
@@ -37,7 +41,8 @@ func ShowAvailableActions(speacialAttackIsAvailable bool) {
 
 func DeclareWinner(winner string) {
 	fmt.Println("------------------------------------------------")
-	fmt.Println("GAME OVER")
+	myFigure := figure.NewColorFigure("GAME OVER", "", "red", true)
+  	myFigure.Print()
 	fmt.Println("------------------------------------------------")
 	fmt.Printf("%v won!",winner)
 }
@@ -60,7 +65,13 @@ func (roundData *RoundData) PrintRoudStatistics() {
 //write a RoundData array to a file
 func WriteLogFile (rounds *[]RoundData) {
 	//we can pass pointer in this fnc, or just the object itself
-	file,err :=os.Create("gamelog.txt")
+
+	ex, err := os.Executable()
+    if err != nil {
+        panic(err)
+    }
+    exPath := filepath.Dir(ex)
+	file,err :=os.Create(exPath+"/gamelog.txt") //pass absolute dir/filename.type
 	if err != nil {
 		println("Error creating file")
 	}
